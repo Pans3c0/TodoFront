@@ -1,23 +1,10 @@
-# ETAPA 1: Construcción
-FROM node:18-slim AS build
-WORKDIR /app
-
-# Copiamos dependencias e instalamos
-COPY package*.json ./
-RUN npm install
-
-# Copiamos el resto del código
-COPY . .
-
-# Inyectamos la variable de entorno de tu API
-ARG REACT_APP_API_URL
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
-
-# Compilamos la app para producción
-RUN npm run build
-
 # ETAPA 2: Servidor Nginx
 FROM nginx:alpine
+
+# Borramos la configuración por defecto y metemos la nuestra
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copiamos los archivos estáticos compilados de la etapa anterior
 COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
