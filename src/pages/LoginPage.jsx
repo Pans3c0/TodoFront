@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // <-- Importa useEffect
 import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 import styles from "../styles/Auth.module.css";
@@ -11,11 +11,21 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const navegar = useNavigate();
 
+  // --- NUEVA DEFENSA: Redirigir si ya está logueado ---
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navegar("/tareas", { replace: true });
+    }
+  }, [navegar]);
+  // ----------------------------------------------------
+
   const manejarCambio = (e) => {
     setDatosFormulario({ ...datosFormulario, [e.target.name]: e.target.value });
   };
 
   const manejarEnvio = async (e) => {
+    // ... tu código de envío se queda exactamente igual ...
     e.preventDefault();
     try {
       const respuesta = await api.post("/auth/login", datosFormulario);
@@ -40,37 +50,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>TODO-LIST</h1>
-      <div className={styles.card}>
-        <h2 className={styles.cardTitle}>Iniciar Sesión</h2>
-        <form onSubmit={manejarEnvio}>
-          <input
-            type="text"
-            name="nombreUsuario"
-            placeholder="Usuario"
-            onChange={manejarCambio}
-            required
-            className={styles.input}
-          />
-          <input
-            type="password"
-            name="contrasena"
-            placeholder="Contraseña"
-            onChange={manejarCambio}
-            required
-            className={styles.input}
-          />
-          <button type="submit" className={styles.button}>
-            Entrar
-          </button>
-        </form>
-        {error && <p className={styles.error}>{error}</p>}
-      </div>
-      <div className={styles.linkContainer}>
-        <Link to="/register">¿No tienes cuenta? Regístrate</Link>
-      </div>
-    </div>
+    // ... tu JSX se queda exactamente igual ...
+    <div className={styles.container}>{/* ... */}</div>
   );
 };
 
