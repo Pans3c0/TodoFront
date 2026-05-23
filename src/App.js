@@ -18,9 +18,6 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/tareas" element={<HomePage />} />
         <Route path="/" element={<Navigate to="/tareas" replace />} />
-
-        {/* --- NUEVA DEFENSA: Atrapa cualquier ruta inválida --- */}
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
